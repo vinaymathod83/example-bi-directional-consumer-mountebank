@@ -1,10 +1,10 @@
 export class Product {
-  constructor({id, name, price}) {
-    if (!id || !name || !price) {
+  constructor({id, type, price}) {
+    if (!id || !type || !price) {
       throw Error("id, name and type are required properties")
     }
     this.id = id
-    this.name = name
+    this.type = name
     this.price = price
   }
 }
