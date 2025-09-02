@@ -27,7 +27,7 @@ describe("API Contract Test", () => {
   const expectedProduct = {
     id: "10",
     type: "CREDIT_CARD",
-    price: "42",
+    price: 42,
   };
 
   describe("retrieving products", () => {
