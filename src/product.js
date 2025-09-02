@@ -4,7 +4,7 @@ export class Product {
       throw Error("id, name and type are required properties")
     }
     this.id = id
-    this.type = name
+    this.type = type
     this.price = price
   }
 }
