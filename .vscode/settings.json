@@ -1,3 +1,11 @@
 {
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "chat.mcp.serverSampling": {
+    "example-bi-directional-consumer-mountebank/.vscode/mcp.json: smartbear": {
+      "allowedModels": [
+        "copilot/gpt-5-mini",
+        "copilot/claude-3.5-sonnet"
+      ]
+    }
+  }
 }
