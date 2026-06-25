@@ -7,7 +7,7 @@
   },
   "scripts": {
     "pretest": "rimraf pacts",
-    "test": "jest",
+    "test": "jest --runInBand",
     "publish": "pact-broker publish ./pacts --consumer-app-version=\"$(npx @pact-foundation/absolute-version)\" --auto-detect-version-properties",
     "can-i-deploy": "pact-broker can-i-deploy --pacticipant pactflow-example-bi-directional-consumer-mountebank --version=\"$(npx @pact-foundation/absolute-version)\" --to-environment production",
     "deploy": "pact-broker record-deployment --pacticipant pactflow-example-bi-directional-consumer-mountebank --version \"$(npx @pact-foundation/absolute-version)\" --environment production"
