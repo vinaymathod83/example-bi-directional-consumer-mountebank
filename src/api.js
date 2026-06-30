@@ -40,38 +40,4 @@ export class ProductAPIClient {
       })
       .then((r) => new Product(r.data));
   }
-
-  async searchProducts(type) {
-    return axios
-      .get(this.withPath("/products/search"), {
-        params: { type },
-        headers: { "Authorization": this.generateAuthToken() },
-      })
-      .then((r) => r.data.map((p) => new Product(p)));
-  }
-
-  async filterProducts(minPrice, maxPrice) {
-    return axios
-      .get(this.withPath("/products/filter"), {
-        params: { minPrice, maxPrice },
-        headers: { "Authorization": this.generateAuthToken() },
-      })
-      .then((r) => r.data.map((p) => new Product(p)));
-  }
-
-  async getProductsByType(type) {
-    return axios
-      .get(this.withPath("/products/type/" + type), {
-        headers: { "Authorization": this.generateAuthToken() },
-      })
-      .then((r) => r.data.map((p) => new Product(p)));
-  }
-
-  async createProduct(product) {
-    return axios
-      .post(this.withPath("/products"), product, {
-        headers: { "Authorization": this.generateAuthToken() },
-      })
-      .then((r) => new Product(r.data));
-  }
 }
