@@ -33,11 +33,11 @@ export class ProductAPIClient {
 
   async getProduct(id) {
     return axios
-       .get(this.withPath("/product/" + id), {
-            headers: {
-                "Authorization": this.generateAuthToken()
-            }
-        })
+      .get(this.withPath("/product/" + id), {
+        headers: {
+          "Authorization": this.generateAuthToken()
+        }
+      })
       .then((r) => new Product(r.data));
   }
 

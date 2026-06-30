@@ -91,14 +91,11 @@ describe("API Contract Test", () => {
     });
   });
 
-  // The following cases are derived from pactflow/oas/products.yaml operations
-  // (searchProducts, filterProducts, getProductsByType, createProduct) using
-  // the spec's own examples. Each uses a fresh imposter so its stub is matched
-  // in isolation (mountebank is first-match).
+  // Cases derived from pactflow/oas/products.yml operations, using the spec's
+  // own examples. Each uses a fresh imposter so its stub matches in isolation.
 
   describe("searching products by type (GET /products/search)", () => {
     test("returns products matching the type", async () => {
-      // Arrange - OAS example query: type=CREDIT_CARD
       const searchStub = new Imposter()
         .withPort(imposterPort)
         .withRecordRequests(true)
@@ -115,17 +112,14 @@ describe("API Contract Test", () => {
         );
       await mb.createImposter(searchStub);
 
-      // Act
       const products = await api.searchProducts("CREDIT_CARD");
 
-      // Assert
       expect(products).toStrictEqual([new Product(expectedProduct)]);
     });
   });
 
   describe("filtering products by price range (GET /products/filter)", () => {
     test("returns products within the range", async () => {
-      // Arrange - OAS example query: minPrice=20&maxPrice=50
       const filtered = [
         { id: "2", type: "CHECKING", price: 25 },
         { id: "10", type: "CREDIT_CARD", price: 42 },
@@ -146,17 +140,14 @@ describe("API Contract Test", () => {
         );
       await mb.createImposter(filterStub);
 
-      // Act
       const products = await api.filterProducts("20", "50");
 
-      // Assert
       expect(products).toStrictEqual(filtered.map((p) => new Product(p)));
     });
   });
 
   describe("retrieving products by type (GET /products/type/{type})", () => {
     test("returns all products of the given type", async () => {
-      // Arrange - OAS example path param: SAVINGS
       const savings = [
         { id: "1", type: "SAVINGS", price: 0 },
         { id: "5", type: "SAVINGS", price: 0 },
@@ -177,18 +168,16 @@ describe("API Contract Test", () => {
         );
       await mb.createImposter(typeStub);
 
-      // Act
       const products = await api.getProductsByType("SAVINGS");
 
-      // Assert
       expect(products).toStrictEqual(savings.map((p) => new Product(p)));
     });
   });
 
   describe("creating a product (POST /products)", () => {
     test("returns the created product", async () => {
-      // Arrange - OAS request/response example
-      const newProduct = { id: "1234", type: "food", price: 42 };
+      // `name` is included because the provider's request schema requires it.
+      const newProduct = { id: "1234", type: "food", name: "pizza", price: 42 };
       const createStub = new Imposter()
         .withPort(imposterPort)
         .withRecordRequests(true)
@@ -205,10 +194,8 @@ describe("API Contract Test", () => {
         );
       await mb.createImposter(createStub);
 
-      // Act
       const product = await api.createProduct(newProduct);
 
-      // Assert
       expect(product).toStrictEqual(new Product(newProduct));
     });
   });
