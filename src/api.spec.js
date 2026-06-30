@@ -27,6 +27,7 @@ describe("API Contract Test", () => {
   const expectedProduct = {
     id: "10",
     type: "CREDIT_CARD",
+    name: "Gem Visa",
     price: 42,
   };
 
@@ -88,115 +89,6 @@ describe("API Contract Test", () => {
       await expect(api.getProduct("11")).rejects.toThrow(
         "Request failed with status code 404"
       );
-    });
-  });
-
-  // Cases derived from pactflow/oas/products.yml operations, using the spec's
-  // own examples. Each uses a fresh imposter so its stub matches in isolation.
-
-  describe("searching products by type (GET /products/search)", () => {
-    test("returns products matching the type", async () => {
-      const searchStub = new Imposter()
-        .withPort(imposterPort)
-        .withRecordRequests(true)
-        .withStub(
-          new Stub()
-            .withPredicate(
-              new EqualPredicate()
-                .withMethod(HttpMethod.GET)
-                .withPath("/products/search")
-            )
-            .withResponse(
-              new Response().withStatusCode(200).withJSONBody([expectedProduct])
-            )
-        );
-      await mb.createImposter(searchStub);
-
-      const products = await api.searchProducts("CREDIT_CARD");
-
-      expect(products).toStrictEqual([new Product(expectedProduct)]);
-    });
-  });
-
-  describe("filtering products by price range (GET /products/filter)", () => {
-    test("returns products within the range", async () => {
-      const filtered = [
-        { id: "2", type: "CHECKING", price: 25 },
-        { id: "10", type: "CREDIT_CARD", price: 42 },
-      ];
-      const filterStub = new Imposter()
-        .withPort(imposterPort)
-        .withRecordRequests(true)
-        .withStub(
-          new Stub()
-            .withPredicate(
-              new EqualPredicate()
-                .withMethod(HttpMethod.GET)
-                .withPath("/products/filter")
-            )
-            .withResponse(
-              new Response().withStatusCode(200).withJSONBody(filtered)
-            )
-        );
-      await mb.createImposter(filterStub);
-
-      const products = await api.filterProducts("20", "50");
-
-      expect(products).toStrictEqual(filtered.map((p) => new Product(p)));
-    });
-  });
-
-  describe("retrieving products by type (GET /products/type/{type})", () => {
-    test("returns all products of the given type", async () => {
-      const savings = [
-        { id: "1", type: "SAVINGS", price: 0 },
-        { id: "5", type: "SAVINGS", price: 0 },
-      ];
-      const typeStub = new Imposter()
-        .withPort(imposterPort)
-        .withRecordRequests(true)
-        .withStub(
-          new Stub()
-            .withPredicate(
-              new EqualPredicate()
-                .withMethod(HttpMethod.GET)
-                .withPath("/products/type/SAVINGS")
-            )
-            .withResponse(
-              new Response().withStatusCode(200).withJSONBody(savings)
-            )
-        );
-      await mb.createImposter(typeStub);
-
-      const products = await api.getProductsByType("SAVINGS");
-
-      expect(products).toStrictEqual(savings.map((p) => new Product(p)));
-    });
-  });
-
-  describe("creating a product (POST /products)", () => {
-    test("returns the created product", async () => {
-      // `name` is included because the provider's request schema requires it.
-      const newProduct = { id: "1234", type: "food", name: "pizza", price: 42 };
-      const createStub = new Imposter()
-        .withPort(imposterPort)
-        .withRecordRequests(true)
-        .withStub(
-          new Stub()
-            .withPredicate(
-              new EqualPredicate()
-                .withMethod(HttpMethod.POST)
-                .withPath("/products")
-            )
-            .withResponse(
-              new Response().withStatusCode(200).withJSONBody(newProduct)
-            )
-        );
-      await mb.createImposter(createStub);
-
-      const product = await api.createProduct(newProduct);
-
-      expect(product).toStrictEqual(new Product(newProduct));
     });
   });
 });

@@ -40,7 +40,7 @@ const normalizeRequestHeaders = (headers) => {
 
 // Product fields the consumer cares about by TYPE, not exact value
 // (see src/product.js and the Product schema in pactflow/oas/products.yml).
-const TYPE_MATCHED_FIELDS = ["id", "type", "price"];
+const TYPE_MATCHED_FIELDS = ["id", "type", "name", "price"];
 
 // Build Pact v2 type matchers for product-shaped response bodies, so that
 // cross-contract verification matches on each field's TYPE rather than the
