@@ -56,6 +56,40 @@ describe("API Contract Test", () => {
     });
   });
 
+  describe("creating a product", () => {
+    const newProduct = {
+      id: "1234",
+      type: "food",
+      name: "pizza",
+      price: 42,
+    };
+
+    beforeAll(async () => {
+      // Arrange
+      imposter.withStub(
+        new Stub()
+          .withPredicate(
+            new EqualPredicate()
+              .withMethod(HttpMethod.POST)
+              .withPath("/products")
+          )
+          .withResponse(
+            new Response().withStatusCode(200).withJSONBody(newProduct)
+          )
+      );
+
+      await mb.createImposter(imposter);
+    });
+
+    test("product is created", async () => {
+      // Act
+      const product = await api.createProduct(newProduct);
+
+      // Assert - did we get the expected response
+      expect(product).toStrictEqual(new Product(newProduct));
+    });
+  });
+
   describe("retrieving a product", () => {
     beforeAll(async () => {
       // Arrange

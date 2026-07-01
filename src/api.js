@@ -40,4 +40,14 @@ export class ProductAPIClient {
       })
       .then((r) => new Product(r.data));
   }
+
+  async createProduct(product) {
+    return axios
+      .post(this.withPath("/products"), product, {
+        headers: {
+          "Authorization": this.generateAuthToken()
+        }
+      })
+      .then((r) => new Product(r.data));
+  }
 }
