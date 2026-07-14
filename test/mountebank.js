@@ -10,11 +10,11 @@ export const writeStubs = async (mb, port) => {
 };
 
 export const stopStubs = () => {
-  return execSync(`mb stop`);
+  return execSync(`mb stop`, { shell: true });
 };
 
 export const startAndClearStubs = () => {
-  spawn("mb", ["restart", "--debug", "true"]);
+  spawn("mb", ["restart", "--debug", "true"], { shell: true });
 
   return waitPort({
     port: mbPort,
